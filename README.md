@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Hệ thống Thư viện Số (Next.js + Supabase)
 
-## Getting Started
+### Tính năng (theo module)
 
-First, run the development server:
+- **M1 Thư viện sách**: CRUD admin (thêm/sửa/xóa), import CSV đơn giản, lượt xem, đánh giá + vote review, tóm tắt AI (OpenAI), đọc PDF / nghe audio
+- **M2 Tài khoản**: tủ sách (đang đọc / đã đọc / wishlist), hồ sơ (bio, ảnh, thể loại yêu thích, bật/tắt thống kê công khai), trang `/u/[id]`
+- **M3 Mượn giấy**: QR `/p/[token]`, mượn/trả, admin duyệt (tuỳ cài đặt), lịch sử `/me/loans`
+- **M4 Thói quen**: phiên đọc/nghe ghi `reading_sessions`, `/me/stats` (phút, streak, biểu đồ 7 ngày, mục tiêu năm, huy hiệu)
+- **M5 Cộng đồng**: `/community/feed` (người follow), `/community/suggestions`, `/community/chat` (chatbot), `/community/quotes`, thử thách + **tự +1 tiến độ** khi đánh dấu sách **Đã đọc xong** (nếu đã tham gia thử thách đang diễn ra)
+- **M6 AI**: tóm tắt sách, **giải thích đoạn** khi đọc PDF, chatbot Q&A theo kho sách
+- **M7 Admin**: như trước
+
+**Email & cron (tuỳ cấu hình):** xác nhận trả sách (Resend), nhắc hạn trước 2 ngày (`/api/cron/loan-reminders` + `SUPABASE_SERVICE_ROLE_KEY`). Chi tiết env bên dưới.
+
+### Database
+
+Chạy **theo thứ tự** trong Supabase SQL Editor:
+
+1. `supabase/schema.sql`
+2. `supabase/schema_extensions.sql`
+3. `supabase/schema_extensions_followup.sql` (cột `borrower_email`, `due_reminder_sent_at` cho email/cron)
+
+### Cài đặt
+
+1) Tạo Supabase project và chạy schema SQL
+
+- Mở Supabase SQL editor và chạy file `supabase/schema.sql`
+- Bật Email auth trong Supabase Auth (nếu chưa)
+- Bật Google provider trong Supabase Auth > Providers
+- Trong Google Cloud Console, thêm Authorized redirect URL:
+  - `https://<SUPABASE_PROJECT_REF>.supabase.co/auth/v1/callback`
+
+2) Cấu hình env
+
+- Copy `.env.local.example` → `.env.local`
+- Điền:
+  - `NEXT_PUBLIC_SUPABASE_URL`
+  - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+  - (tuỳ chọn AI) `OPENAI_API_KEY`, `OPENAI_MODEL`
+  - (tuỳ chọn email) `RESEND_API_KEY`, `RESEND_FROM` (ví dụ `Thư viện <onboarding@resend.dev>`)
+  - (cron nhắc hạn) `SUPABASE_SERVICE_ROLE_KEY`, `CRON_SECRET` (gọi tay: `curl -H "Authorization: Bearer $CRON_SECRET" http://localhost:3000/api/cron/loan-reminders`). Trên Vercel dùng `vercel.json` — job gửi kèm header `x-vercel-cron` nên không cần Bearer.
+
+3) Chạy dev
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Mở `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Set tài khoản Admin (1 lần)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Sau khi tạo tài khoản đầu tiên, vào Supabase Table Editor → `profiles` và set `is_admin = true` cho user đó.
 
-## Learn More
+### Storage buckets
 
-To learn more about Next.js, take a look at the following resources:
+Schema đã tạo các bucket:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `covers` (public)
+- `pdfs` (private: chỉ user đã login đọc được)
+- `audios` (private: chỉ user đã login đọc được)
+- `avatars` (public — ảnh đại diện upload tại `/me/edit`, extension SQL)
