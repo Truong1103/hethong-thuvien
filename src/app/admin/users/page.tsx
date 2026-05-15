@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { toggleUserBlockFormAction } from "@/app/admin/users/actions";
+import { ToggleUserBlockButton } from "@/app/admin/users/ToggleUserBlockButton";
 import { requireUser } from "@/lib/auth";
 
 export default async function AdminUsersPage() {
@@ -57,15 +57,7 @@ export default async function AdminUsersPage() {
                     <Link href={`/admin/users/${u.id}/reading`} className="text-sm text-teal-700 hover:underline">
                       Lịch sử đọc
                     </Link>
-                    {!u.is_admin ? (
-                      <form action={toggleUserBlockFormAction} className="inline">
-                        <input type="hidden" name="user_id" value={u.id} />
-                        <input type="hidden" name="blocked" value={(!u.is_blocked).toString()} />
-                        <button type="submit" className="text-sm text-zinc-700 underline hover:text-zinc-950">
-                          {u.is_blocked ? "Mở khóa" : "Khóa"}
-                        </button>
-                      </form>
-                    ) : null}
+                    {!u.is_admin ? <ToggleUserBlockButton userId={u.id} blocked={u.is_blocked} /> : null}
                   </div>
                 </td>
               </tr>

@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { returnLoanAction } from "@/app/actions/loans";
+import { toast } from "@/lib/toast";
 
 export function ReturnLoanButton(props: { loanId: string; qrToken?: string }) {
   const router = useRouter();
@@ -14,9 +15,12 @@ export function ReturnLoanButton(props: { loanId: string; qrToken?: string }) {
     setLoading(true);
     try {
       await returnLoanAction(props.loanId, props.qrToken);
+      toast.success("Đã ghi nhận trả sách.");
       router.refresh();
     } catch (e) {
-      setErr(e instanceof Error ? e.message : "Lỗi");
+      const m = e instanceof Error ? e.message : "Lỗi";
+      setErr(m);
+      toast.error(m);
     } finally {
       setLoading(false);
     }

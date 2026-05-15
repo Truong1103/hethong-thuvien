@@ -1,7 +1,6 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { requireUser } from "@/lib/auth";
 
 async function requireAdmin() {
@@ -90,7 +89,6 @@ export async function deleteBookAdminAction(bookId: string) {
   const { error } = await supabase.from("books").delete().eq("id", bookId);
   if (error) throw error;
   revalidatePath("/admin/books");
-  redirect("/admin/books");
 }
 
 export async function deleteBookFormAction(formData: FormData) {
@@ -116,5 +114,4 @@ export async function createChallengeAction(formData: FormData) {
     target_books: Number.isFinite(target_books) ? Math.max(1, Math.floor(target_books)) : 1,
   });
   revalidatePath("/community/challenges");
-  redirect("/community/challenges");
 }

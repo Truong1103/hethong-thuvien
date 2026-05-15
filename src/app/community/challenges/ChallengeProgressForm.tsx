@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { updateChallengeProgressAction } from "@/app/actions/challenges";
+import { toast } from "@/lib/toast";
 
 export function ChallengeProgressForm(props: { challengeId: string; current: number; target: number }) {
   const router = useRouter();
@@ -15,7 +16,10 @@ export function ChallengeProgressForm(props: { challengeId: string; current: num
     try {
       const v = Math.min(props.target, Math.max(0, Math.floor(Number(n))));
       await updateChallengeProgressAction(props.challengeId, v);
+      toast.success("Đã cập nhật tiến độ thử thách.");
       router.refresh();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Không cập nhật được");
     } finally {
       setLoading(false);
     }

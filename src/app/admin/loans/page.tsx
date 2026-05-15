@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { approveLoanFormAction } from "@/app/admin/loans/actions";
+import { ApproveLoanButton } from "@/app/admin/loans/ApproveLoanButton";
 import { requireUser } from "@/lib/auth";
 
 export default async function AdminLoansPage() {
@@ -74,14 +74,7 @@ export default async function AdminLoansPage() {
                     {row.due_at ? new Date(row.due_at).toLocaleDateString("vi-VN") : "—"}
                   </td>
                   <td className="px-4 py-3">
-                    {row.status === "pending" ? (
-                      <form action={approveLoanFormAction}>
-                        <input type="hidden" name="loan_id" value={row.id} />
-                        <button type="submit" className="text-sm font-medium text-emerald-700 hover:underline">
-                          Duyệt cho mượn
-                        </button>
-                      </form>
-                    ) : null}
+                    {row.status === "pending" ? <ApproveLoanButton loanId={row.id} /> : null}
                   </td>
                 </tr>
               );

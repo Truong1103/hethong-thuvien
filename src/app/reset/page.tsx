@@ -2,6 +2,7 @@
 
 import { AuthScaffold } from "@/components/AuthScaffold";
 import { btnPrimaryClass, inputClass } from "@/lib/ui";
+import { toast } from "@/lib/toast";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { KeyRound } from "lucide-react";
 import Link from "next/link";
@@ -24,9 +25,13 @@ export default function ResetPasswordPage() {
         redirectTo: `${window.location.origin}/update-password`,
       });
       if (error) throw error;
-      setMessage("Đã gửi email đặt lại mật khẩu (nếu email tồn tại).");
+      const m = "Đã gửi email đặt lại mật khẩu (nếu email tồn tại).";
+      setMessage(m);
+      toast.success(m);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Gửi email thất bại");
+      const m = err instanceof Error ? err.message : "Gửi email thất bại";
+      setError(m);
+      toast.error(m);
     } finally {
       setLoading(false);
     }

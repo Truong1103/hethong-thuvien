@@ -1,6 +1,7 @@
 "use client";
 
 import { upsertReviewAction, voteReviewAction } from "@/app/books/[id]/actions";
+import { toast } from "@/lib/toast";
 import { btnPrimaryClass, inputClass } from "@/lib/ui";
 import { MessageSquare, Star, ThumbsDown, ThumbsUp, User } from "lucide-react";
 import Link from "next/link";
@@ -38,15 +39,23 @@ export function ReviewsSection(props: {
     setSaving(true);
     try {
       await upsertReviewAction(props.bookId, rating, content);
+      toast.success("Đã lưu đánh giá.");
       router.refresh();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Không lưu được");
     } finally {
       setSaving(false);
     }
   }
 
   async function vote(reviewId: string, next: 1 | -1 | 0) {
-    await voteReviewAction(reviewId, next);
-    router.refresh();
+    try {
+      await voteReviewAction(reviewId, next);
+      toast.success(next === 0 ? "Đã gỡ bình chọn." : "Đã ghi nhận bình chọn.");
+      router.refresh();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Không bình chọn được");
+    }
   }
 
   return (

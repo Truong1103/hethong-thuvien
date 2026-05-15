@@ -3,6 +3,8 @@
 import { AuthScaffold } from "@/components/AuthScaffold";
 import { GoogleLogo } from "@/components/icons/GoogleLogo";
 import { btnGoogleClass, btnPrimaryClass, inputClass } from "@/lib/ui";
+import { getOAuthCallbackUrl } from "@/lib/auth-redirect";
+import { toast } from "@/lib/toast";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { UserPlus } from "lucide-react";
 import Link from "next/link";
@@ -27,10 +29,13 @@ export default function SignupPage() {
       const { error } = await supabase.auth.signUp({ email, password });
       if (error) throw error;
       setDone(true);
+      toast.success("Đăng ký thành công. Kiểm tra email xác nhận nếu bật xác thực.");
       router.push("/books");
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Đăng ký thất bại");
+      const m = err instanceof Error ? err.message : "Đăng ký thất bại";
+      setError(m);
+      toast.error(m);
     } finally {
       setLoading(false);
     }
@@ -44,13 +49,15 @@ export default function SignupPage() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback?next=/books`,
+          redirectTo: getOAuthCallbackUrl("/books"),
         },
       });
       if (error) throw error;
     } catch (err) {
       setGoogleLoading(false);
-      setError(err instanceof Error ? err.message : "Đăng ký Google thất bại");
+      const m = err instanceof Error ? err.message : "Đăng ký Google thất bại";
+      setError(m);
+      toast.error(m);
     }
   }
 

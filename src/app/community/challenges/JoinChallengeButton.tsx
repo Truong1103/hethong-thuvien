@@ -3,6 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { joinChallengeAction } from "@/app/actions/challenges";
+import { btnPrimaryInlineClass } from "@/lib/ui";
+import { toast } from "@/lib/toast";
 
 export function JoinChallengeButton(props: { challengeId: string; joined: boolean }) {
   const router = useRouter();
@@ -14,9 +16,11 @@ export function JoinChallengeButton(props: { challengeId: string; joined: boolea
     setLoading(true);
     try {
       await joinChallengeAction(props.challengeId);
+      toast.success("Đã tham gia thử thách.");
       router.refresh();
     } catch (e) {
       setErr(e instanceof Error ? e.message : "Lỗi");
+      toast.error(e instanceof Error ? e.message : "Lỗi");
     } finally {
       setLoading(false);
     }
@@ -33,7 +37,7 @@ export function JoinChallengeButton(props: { challengeId: string; joined: boolea
         type="button"
         disabled={loading}
         onClick={join}
-        className="rounded-md bg-zinc-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-zinc-800 disabled:opacity-60"
+        className={btnPrimaryInlineClass}
       >
         {loading ? "..." : "Tham gia"}
       </button>

@@ -24,7 +24,7 @@ export async function Footer() {
               <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-teal-500 to-emerald-600 text-white shadow-sm shadow-teal-600/20">
                 <Library className="h-4 w-4" strokeWidth={2.5} />
               </span>
-              Thư viện Số
+              Thư viện Số Lá Xanh
             </Link>
             <p className="mt-3 max-w-sm text-sm leading-relaxed text-zinc-600">
               Đọc PDF, nghe audio, tủ sách và cộng đồng — một nơi để khám phá và duy trì thói quen đọc.

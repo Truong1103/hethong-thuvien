@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+import { toast } from "@/lib/toast";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 export default function AdminImportPage() {
@@ -32,10 +33,14 @@ export default function AdminImportPage() {
         });
         if (!error) ok++;
       }
-      setMsg(`Đã nhập khoảng ${ok} dòng (bỏ qua dòng thiếu tên/tác giả).`);
+      const summary = `Đã nhập khoảng ${ok} dòng (bỏ qua dòng thiếu tên/tác giả).`;
+      setMsg(summary);
+      toast.success(summary);
       router.refresh();
     } catch (e) {
-      setMsg(e instanceof Error ? e.message : "Lỗi");
+      const m = e instanceof Error ? e.message : "Lỗi";
+      setMsg(m);
+      toast.error(m);
     } finally {
       setLoading(false);
     }

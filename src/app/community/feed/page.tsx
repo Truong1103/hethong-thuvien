@@ -25,8 +25,14 @@ export default async function CommunityFeedPage() {
   }
 
   const { data: follows } = await supabase.from("follows").select("following_id").eq("follower_id", user.id);
-  const ids = (follows ?? []).map((f) => f.following_id);
-  if (ids.length === 0) {
+  const rawIds = (follows ?? []).map((f) => f.following_id);
+  const { data: activeFollowed } =
+    rawIds.length > 0
+      ? await supabase.from("profiles").select("id").in("id", rawIds).eq("is_blocked", false)
+      : { data: [] as { id: string }[] };
+  const ids = (activeFollowed ?? []).map((p) => p.id);
+
+  if (rawIds.length === 0) {
     return (
       <div className="space-y-8">
         <header className="space-y-4">
@@ -53,6 +59,27 @@ export default async function CommunityFeedPage() {
     );
   }
 
+  if (rawIds.length > 0 && ids.length === 0) {
+    return (
+      <div className="space-y-8">
+        <header className="space-y-4">
+          <CommunitySubnav current="feed" />
+          <div className="rounded-3xl border border-zinc-200/90 bg-amber-50/80 p-6 shadow-sm sm:p-8">
+            <h1 className="text-xl font-bold tracking-tight text-zinc-900 sm:text-2xl">Không có feed khả dụng</h1>
+            <p className="mt-3 text-sm leading-relaxed text-zinc-700 sm:text-base">
+              Các tài khoản bạn theo dõi hiện không hiển thị hoạt động (ví dụ đã bị khóa). Hãy cập nhật danh sách theo
+              dõi tại{" "}
+              <Link href="/community/suggestions" className="font-semibold text-teal-800 underline">
+                Gợi ý theo dõi
+              </Link>
+              .
+            </p>
+          </div>
+        </header>
+      </div>
+    );
+  }
+
   const { data: shelves } = await supabase
     .from("user_bookshelves")
     .select("status, updated_at, user_id, book_id, books ( id, title )")
@@ -60,7 +87,8 @@ export default async function CommunityFeedPage() {
     .order("updated_at", { ascending: false })
     .limit(40);
 
-  const shelfUserIds = [...new Set((shelves ?? []).map((s) => s.user_id))];
+  const shelfRows = shelves ?? [];
+  const shelfUserIds = [...new Set(shelfRows.map((s) => s.user_id))];
   const { data: names } = await supabase.from("profiles").select("id, display_name").in("id", shelfUserIds);
   const nameMap = Object.fromEntries((names ?? []).map((n) => [n.id, n.display_name]));
 
@@ -83,8 +111,14 @@ export default async function CommunityFeedPage() {
         </div>
       </header>
 
+      {shelfRows.length === 0 ? (
+        <div className="rounded-2xl border border-dashed border-zinc-300 bg-zinc-50 px-6 py-10 text-center text-sm text-zinc-600">
+          Chưa có cập nhật tủ sách từ người bạn theo dõi (họ chưa thêm sách vào đang đọc / đã xong / muốn đọc). Hãy
+          quay lại sau hoặc theo dõi thêm thành viên khác.
+        </div>
+      ) : (
       <ul className="space-y-3">
-        {(shelves ?? []).map((row) => {
+        {shelfRows.map((row) => {
           const b = row.books as { id?: string; title?: string } | { id?: string; title?: string }[] | null;
           const book = Array.isArray(b) ? b[0] : b;
           const title = book?.title;
@@ -125,6 +159,8 @@ export default async function CommunityFeedPage() {
           );
         })}
       </ul>
+      )}
     </div>
   );
 }
+

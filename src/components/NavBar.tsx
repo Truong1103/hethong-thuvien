@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import {
   BarChart3,
@@ -44,10 +45,17 @@ export async function NavBar() {
           href="/"
           className="flex shrink-0 items-center gap-2 font-semibold tracking-tight text-zinc-900 transition hover:text-teal-700"
         >
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-teal-500 to-emerald-600 text-white shadow-sm shadow-teal-600/25">
-            <Library className="h-4 w-4" strokeWidth={2.5} />
+          <span className="relative flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-teal-500 to-emerald-600 shadow-sm shadow-teal-600/25 ring-1 ring-white/25">
+            <Image
+              src="/book.png"
+              alt="Thư viện Số Lá Xanh"
+              width={22}
+              height={22}
+              className="h-[1.15rem] w-[1.15rem] object-contain drop-shadow-sm mix-blend-screen"
+              priority
+            />
           </span>
-          <span className="hidden sm:inline">Thư viện Số</span>
+          <span className="hidden sm:inline">Thư viện Số Lá Xanh</span>
         </Link>
 
         <nav className="flex min-w-0 flex-1 flex-wrap items-center justify-end gap-1 sm:gap-2 md:justify-center">

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { updateSystemSettingsAction } from "@/app/admin/actions";
+import { AdminSettingsForm } from "@/app/admin/AdminSettingsForm";
 import { requireUser } from "@/lib/auth";
 
 export default async function AdminSettingsPage() {
@@ -24,35 +24,11 @@ export default async function AdminSettingsPage() {
         </Link>
       </div>
 
-      <form action={updateSystemSettingsAction} className="space-y-4 rounded-xl border border-zinc-200 bg-white p-6">
-        <div className="space-y-1">
-          <label className="text-sm font-medium">Thời hạn mượn mặc định (ngày)</label>
-          <input
-            name="loan_default_days"
-            type="number"
-            min={1}
-            defaultValue={Number.isFinite(days) ? days : 14}
-            className="w-full rounded-md border border-zinc-200 px-3 py-2 text-sm"
-          />
-        </div>
-        <div className="space-y-1">
-          <label className="text-sm font-medium">Số sách tối đa mượn cùng lúc</label>
-          <input
-            name="loan_max_active"
-            type="number"
-            min={1}
-            defaultValue={Number.isFinite(max) ? max : 5}
-            className="w-full rounded-md border border-zinc-200 px-3 py-2 text-sm"
-          />
-        </div>
-        <label className="flex items-center gap-2 text-sm">
-          <input type="checkbox" name="loan_auto_approve" defaultChecked={auto} className="rounded border-zinc-300" />
-          Tự động duyệt cho mượn (không chờ admin)
-        </label>
-        <button type="submit" className="rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white">
-          Lưu
-        </button>
-      </form>
+      <AdminSettingsForm
+        loanDefaultDays={Number.isFinite(days) ? days : 14}
+        loanMaxActive={Number.isFinite(max) ? max : 5}
+        loanAutoApprove={auto}
+      />
     </div>
   );
 }

@@ -5,6 +5,7 @@ import {
   savePdfProgressAction,
   startReadingSessionAction,
 } from "@/app/books/[id]/actions";
+import { toast } from "@/lib/toast";
 import debounce from "lodash.debounce";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
@@ -109,9 +110,14 @@ export function PdfReader(props: {
       });
       const data = (await res.json()) as { reply?: string; error?: string };
       if (!res.ok) throw new Error(data.error ?? "Lỗi");
-      if (data.reply) setExplain(data.reply);
+      if (data.reply) {
+        setExplain(data.reply);
+        toast.success("Đã giải thích đoạn chọn.");
+      }
     } catch (e) {
-      setExplainErr(e instanceof Error ? e.message : "Lỗi");
+      const m = e instanceof Error ? e.message : "Lỗi";
+      setExplainErr(m);
+      toast.error(m);
     } finally {
       setExplainLoading(false);
     }

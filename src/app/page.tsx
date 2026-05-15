@@ -17,7 +17,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { linkBtnGhost, linkBtnPrimary, linkBtnSecondary } from "@/lib/ui";
 
 const HERO_IMAGE =
-  "https://m.yodycdn.com/blog/tam-quan-trong-cua-viec-doc-sach-yody-vn2.jpg";
+  "https://nhietnangviet.vn/thumbs/400x444x1/upload/news/thiet-ke-chua-co-ten-23-1741246734.png.webp";
 
 const READING_IMAGE =
   "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=1200&q=80";
@@ -54,7 +54,7 @@ export default async function Home() {
   return (
     <div className="space-y-16 pb-12">
       <section className="overflow-hidden rounded-3xl border border-zinc-200/80 bg-gradient-to-br from-white via-teal-50/40 to-emerald-50/30 shadow-xl shadow-zinc-900/5">
-        <div className="grid items-center gap-8 p-6 sm:p-10 lg:grid-cols-2 lg:gap-12">
+        <div className="grid items-center gap-8 p-6 sm:p-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.06fr)] lg:gap-8 xl:gap-10">
           <div className="space-y-6">
             <p className="inline-flex items-center gap-2 rounded-full border border-teal-200/80 bg-white/80 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-teal-800 shadow-sm">
               <Sparkles className="h-3.5 w-3.5 text-amber-500" />
@@ -93,13 +93,13 @@ export default async function Home() {
               )}
             </div>
           </div>
-          <div className="relative aspect-[4/3] min-h-[200px] overflow-hidden rounded-2xl border border-zinc-200/80 shadow-lg ring-1 ring-black/5 lg:aspect-auto lg:min-h-[280px]">
+          <div className="relative aspect-[4/3] min-h-[220px] w-full overflow-hidden rounded-2xl border border-zinc-200/80 shadow-lg ring-1 ring-black/5 sm:min-h-[280px] lg:aspect-auto lg:min-h-[340px] xl:min-h-[380px]">
             <Image
               src={HERO_IMAGE}
               alt="Không gian thư viện với kệ sách"
               fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-cover object-center"
+              sizes="(max-width: 1024px) 100vw, 52vw"
               priority
             />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-zinc-900/50 via-transparent to-transparent" />

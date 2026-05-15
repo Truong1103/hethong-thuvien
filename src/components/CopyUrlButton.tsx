@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "@/lib/toast";
 import { useState } from "react";
 
 export function CopyUrlButton({ text }: { text: string }) {
@@ -11,9 +12,10 @@ export function CopyUrlButton({ text }: { text: string }) {
         try {
           await navigator.clipboard.writeText(text);
           setDone(true);
+          toast.success("Đã sao chép URL.");
           setTimeout(() => setDone(false), 2000);
         } catch {
-          /* ignore */
+          toast.error("Không sao chép được (trình duyệt chặn).");
         }
       }}
       className="rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-xs font-semibold text-zinc-800 shadow-sm hover:bg-zinc-50"

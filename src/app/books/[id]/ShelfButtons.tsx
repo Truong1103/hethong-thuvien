@@ -1,6 +1,7 @@
 "use client";
 
 import { type BookshelfStatus, setShelfStatusAction } from "@/app/books/[id]/actions";
+import { toast } from "@/lib/toast";
 import { Bookmark, BookOpen, CheckCircle2, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -18,7 +19,18 @@ export function ShelfButtons(props: { bookId: string; current: BookshelfStatus |
     try {
       await setShelfStatusAction(props.bookId, status);
       setCurrent(status);
+      toast.success(
+        status === null
+          ? "Đã gỡ khỏi tủ sách."
+          : status === "reading"
+            ? "Đã thêm vào Đang đọc."
+            : status === "finished"
+              ? "Đã đánh dấu Đã đọc xong."
+              : "Đã thêm vào Muốn đọc.",
+      );
       router.refresh();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Không cập nhật được tủ sách");
     } finally {
       setLoading(false);
     }

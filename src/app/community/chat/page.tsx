@@ -2,6 +2,7 @@
 
 import { CommunitySubnav } from "@/components/community/CommunitySubnav";
 import { btnPrimaryInlineClass, inputClass } from "@/lib/ui";
+import { toast } from "@/lib/toast";
 import { Bot, SendHorizontal, Sparkles, User } from "lucide-react";
 import { useState } from "react";
 
@@ -26,10 +27,9 @@ export default function BookChatPage() {
       if (!res.ok) throw new Error(data.error ?? "Lỗi");
       setMessages((m) => [...m, { role: "assistant", text: data.reply ?? "" }]);
     } catch (e) {
-      setMessages((m) => [
-        ...m,
-        { role: "assistant", text: e instanceof Error ? e.message : "Lỗi không xác định" },
-      ]);
+      const msg = e instanceof Error ? e.message : "Lỗi không xác định";
+      toast.error(msg);
+      setMessages((prev) => [...prev, { role: "assistant", text: msg }]);
     } finally {
       setLoading(false);
     }

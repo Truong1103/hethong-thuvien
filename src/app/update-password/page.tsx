@@ -2,6 +2,7 @@
 
 import { AuthScaffold } from "@/components/AuthScaffold";
 import { btnPrimaryClass, inputClass } from "@/lib/ui";
+import { toast } from "@/lib/toast";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { Lock } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -24,10 +25,13 @@ export default function UpdatePasswordPage() {
       const { error } = await supabase.auth.updateUser({ password });
       if (error) throw error;
       setMessage("Cập nhật mật khẩu thành công.");
+      toast.success("Cập nhật mật khẩu thành công.");
       router.push("/books");
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Cập nhật thất bại");
+      const m = err instanceof Error ? err.message : "Cập nhật thất bại";
+      setError(m);
+      toast.error(m);
     } finally {
       setLoading(false);
     }

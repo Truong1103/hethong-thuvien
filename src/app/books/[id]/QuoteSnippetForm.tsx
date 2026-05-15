@@ -1,6 +1,7 @@
 "use client";
 
 import { addPublicQuoteAction } from "@/app/books/[id]/actions";
+import { toast } from "@/lib/toast";
 import { btnPrimaryClass, inputClass } from "@/lib/ui";
 import { Quote, Send } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -21,9 +22,11 @@ export function QuoteSnippetForm(props: { bookId: string }) {
     try {
       await addPublicQuoteAction(props.bookId, text);
       setText("");
+      toast.success("Đã đăng trích dẫn lên cộng đồng.");
       router.refresh();
     } catch (ex) {
       setErr(ex instanceof Error ? ex.message : "Lỗi");
+      toast.error(ex instanceof Error ? ex.message : "Lỗi");
     } finally {
       setLoading(false);
     }

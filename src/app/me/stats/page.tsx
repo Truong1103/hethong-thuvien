@@ -1,7 +1,6 @@
-import { saveReadingGoalAction } from "@/app/me/goalActions";
+import { ReadingGoalForm } from "@/app/me/ReadingGoalForm";
 import { BadgeCollection } from "@/components/BadgeCollection";
 import { addDaysVN, computeGamificationBadges, readingStreakDays, todayVN, vnDay } from "@/lib/badges";
-import { btnPrimaryInlineClass, inputClass } from "@/lib/ui";
 import { requireUser } from "@/lib/auth";
 import { ArrowLeft, Award, Flame, Timer } from "lucide-react";
 import Link from "next/link";
@@ -175,22 +174,7 @@ export default async function StatsPage() {
         <div className="rounded-2xl border border-zinc-200/90 bg-gradient-to-br from-emerald-50/40 to-white p-6 shadow-sm sm:p-8">
           <h2 className="text-lg font-bold text-zinc-900">Mục tiêu năm {year}</h2>
           <p className="mt-1 text-xs text-zinc-600">Số cuốn muốn đánh dấu &quot;đã đọc xong&quot; trong năm.</p>
-          <form action={saveReadingGoalAction} className="mt-5 space-y-4">
-            <input type="hidden" name="year" value={year} readOnly />
-            <label className="block text-sm font-medium text-zinc-700">
-              Số cuốn mục tiêu
-              <input
-                name="targetBooks"
-                type="number"
-                min={1}
-                defaultValue={target}
-                className={`${inputClass} mt-2`}
-              />
-            </label>
-            <button type="submit" className={btnPrimaryInlineClass}>
-              Lưu mục tiêu
-            </button>
-          </form>
+          <ReadingGoalForm year={year} defaultTarget={target} />
           <div className="mt-6">
             <div className="flex justify-between text-sm text-zinc-600">
               <span>Tiến độ</span>

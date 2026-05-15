@@ -6,6 +6,12 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { UserPlus } from "lucide-react";
 import Link from "next/link";
 
+type ProfileRow = {
+  id: string;
+  display_name: string | null;
+  favorite_genres: string[] | null;
+};
+
 export default async function SuggestionsPage() {
   const supabase = await createSupabaseServerClient();
   const {
@@ -27,28 +33,27 @@ export default async function SuggestionsPage() {
 
   const { data: meProf } = await supabase.from("profiles").select("favorite_genres").eq("id", user.id).maybeSingle();
   const myGenres = (meProf?.favorite_genres as string[] | null) ?? [];
-  const first = myGenres[0];
 
   const { data: follows } = await supabase.from("follows").select("following_id").eq("follower_id", user.id);
   const followingSet = new Set((follows ?? []).map((f) => f.following_id));
 
-  let candidates: { id: string; display_name: string | null; favorite_genres: string[] | null }[] = [];
+  const base = () =>
+    supabase
+      .from("profiles")
+      .select("id, display_name, favorite_genres")
+      .neq("id", user.id)
+      .eq("is_blocked", false);
 
-  if (first) {
-    const { data } = await supabase
-      .from("profiles")
-      .select("id, display_name, favorite_genres")
-      .neq("id", user.id)
-      .contains("favorite_genres", [first])
-      .limit(20);
-    candidates = (data ?? []) as typeof candidates;
-  } else {
-    const { data } = await supabase
-      .from("profiles")
-      .select("id, display_name, favorite_genres")
-      .neq("id", user.id)
-      .limit(12);
-    candidates = (data ?? []) as typeof candidates;
+  let candidates: ProfileRow[] = [];
+
+  if (myGenres.length > 0) {
+    const { data: overlap } = await base().overlaps("favorite_genres", myGenres).limit(30);
+    candidates = (overlap ?? []) as ProfileRow[];
+  }
+
+  if (candidates.length === 0) {
+    const { data: anyone } = await base().order("created_at", { ascending: false }).limit(30);
+    candidates = (anyone ?? []) as ProfileRow[];
   }
 
   const scored = candidates
@@ -72,8 +77,8 @@ export default async function SuggestionsPage() {
           </p>
           <h1 className="mt-2 text-2xl font-bold tracking-tight text-zinc-900 sm:text-3xl">Mở rộng vòng bạn đọc</h1>
           <p className="mt-3 max-w-2xl text-sm leading-relaxed text-zinc-600 sm:text-base">
-            Danh sách gợi ý dựa trên thể loại trong hồ sơ của bạn (ưu tiên trùng thể loại). Theo dõi vài người để Feed
-            luôn có hoạt động tủ sách mới.
+            Danh sách thành viên trong hệ thống (ưu tiên trùng thể loại với hồ sơ của bạn). Theo dõi vài người để Feed
+            hiển thị hoạt động tủ sách mới nhất của họ.
           </p>
           <Link href="/community/feed" className={`${linkBtnPrimary} mt-5 inline-flex w-fit gap-2`}>
             Đi tới Feed
@@ -81,13 +86,13 @@ export default async function SuggestionsPage() {
         </div>
       </header>
 
-      {!first ? (
+      {!myGenres.length ? (
         <div className="rounded-2xl border border-amber-200/90 bg-amber-50 px-4 py-3 text-sm text-amber-950">
           Thêm thể loại yêu thích tại{" "}
           <Link href="/me/edit" className="font-semibold text-amber-900 underline">
             Sửa hồ sơ
           </Link>{" "}
-          để gợi ý khớp sở thích tốt hơn.
+          để xếp gợi ý theo sở thích rõ hơn.
         </div>
       ) : null}
 
@@ -122,7 +127,8 @@ export default async function SuggestionsPage() {
 
       {scored.length === 0 ? (
         <p className="rounded-2xl border border-dashed border-zinc-300 bg-zinc-50 px-6 py-10 text-center text-sm text-zinc-600">
-          Chưa có gợi ý phù hợp. Thử cập nhật thể loại yêu thích hoặc quay lại sau.
+          Chưa có thành viên khác trong cơ sở dữ liệu (hoặc tất cả đã bị khóa / bạn đã theo dõi hết). Thử lại sau hoặc
+          mời thêm người đăng ký.
         </p>
       ) : null}
     </div>

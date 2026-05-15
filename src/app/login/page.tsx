@@ -3,6 +3,8 @@
 import { AuthScaffold } from "@/components/AuthScaffold";
 import { GoogleLogo } from "@/components/icons/GoogleLogo";
 import { btnGoogleClass, btnPrimaryClass, inputClass } from "@/lib/ui";
+import { getOAuthCallbackUrl } from "@/lib/auth-redirect";
+import { toast } from "@/lib/toast";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { LogIn } from "lucide-react";
 import Link from "next/link";
@@ -30,10 +32,13 @@ function LoginForm() {
       const supabase = createSupabaseBrowserClient();
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
+      toast.success("Đăng nhập thành công.");
       router.push(nextPath);
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Đăng nhập thất bại");
+      const m = err instanceof Error ? err.message : "Đăng nhập thất bại";
+      setError(m);
+      toast.error(m);
     } finally {
       setLoading(false);
     }
@@ -47,13 +52,15 @@ function LoginForm() {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath)}`,
+          redirectTo: getOAuthCallbackUrl(nextPath),
         },
       });
       if (error) throw error;
     } catch (err) {
       setGoogleLoading(false);
-      setError(err instanceof Error ? err.message : "Đăng nhập Google thất bại");
+      const m = err instanceof Error ? err.message : "Đăng nhập Google thất bại";
+      setError(m);
+      toast.error(m);
     }
   }
 

@@ -24,6 +24,11 @@ const nextConfig: NextConfig = {
         hostname: "m.yodycdn.com",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "nhietnangviet.vn",
+        pathname: "/**",
+      },
       ...(supabaseHost
         ? [
             {

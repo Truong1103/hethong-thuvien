@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import QRCode from "qrcode";
-import { createPhysicalCopyFormAction } from "@/app/admin/actions";
+import { CreatePhysicalCopyForm } from "@/app/admin/books/CreatePhysicalCopyForm";
 import { CopyUrlButton } from "@/components/CopyUrlButton";
 import { requireUser } from "@/lib/auth";
 import { siteUrlForPath } from "@/lib/site-url";
@@ -49,16 +49,7 @@ export default async function AdminBookCopiesPage(props: { params: Params }) {
         </Link>
       </div>
 
-      <form action={createPhysicalCopyFormAction} className="flex flex-wrap items-end gap-3 rounded-2xl border border-zinc-200/90 bg-white p-4 shadow-sm">
-        <input type="hidden" name="book_id" value={bookId} />
-        <div className="min-w-[200px] flex-1">
-          <label className="text-xs font-medium text-zinc-700">Nhãn kệ (tuỳ chọn)</label>
-          <input name="shelf_label" className="mt-1 w-full rounded-xl border border-zinc-200 px-3 py-2 text-sm" placeholder="Kệ A3" />
-        </div>
-        <button type="submit" className="rounded-xl bg-zinc-900 px-4 py-2 text-sm font-semibold text-white hover:bg-zinc-800">
-          Tạo mã QR mới
-        </button>
-      </form>
+      <CreatePhysicalCopyForm bookId={bookId} />
 
       <div className="rounded-2xl border border-zinc-200/90 bg-white shadow-sm">
         <div className="border-b border-zinc-200 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { borrowPhysicalCopyAction, returnLoanAction } from "@/app/actions/loans";
+import { toast } from "@/lib/toast";
 
 export type MyLoanOnCopy = {
   id: string;
@@ -23,9 +24,12 @@ export function BorrowBar(props: { copyId: string; userId: string | null; token:
     setLoading(true);
     try {
       await borrowPhysicalCopyAction(props.copyId, props.token);
+      toast.success("Đã gửi yêu cầu mượn. Xem trạng thái trên trang này hoặc Mượn / trả.");
       router.refresh();
     } catch (e) {
-      setErr(e instanceof Error ? e.message : "Không mượn được");
+      const m = e instanceof Error ? e.message : "Không mượn được";
+      setErr(m);
+      toast.error(m);
     } finally {
       setLoading(false);
     }
@@ -37,9 +41,12 @@ export function BorrowBar(props: { copyId: string; userId: string | null; token:
     setLoading(true);
     try {
       await returnLoanAction(props.myLoan.id, props.token);
+      toast.success("Đã ghi nhận trả sách. Kiểm tra email xác nhận nếu đã bật gửi mail.");
       router.refresh();
     } catch (e) {
-      setErr(e instanceof Error ? e.message : "Không trả được");
+      const m = e instanceof Error ? e.message : "Không trả được";
+      setErr(m);
+      toast.error(m);
     } finally {
       setLoading(false);
     }

@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "@/lib/toast";
 import { btnPrimaryInlineClass } from "@/lib/ui";
 import { Sparkles } from "lucide-react";
 import { useState } from "react";
@@ -21,9 +22,14 @@ export function BookAiSummary(props: { bookId: string; initialSummary: string | 
       });
       const data = (await res.json()) as { summary?: string; error?: string };
       if (!res.ok) throw new Error(data.error ?? "Không tóm tắt được");
-      if (data.summary) setText(data.summary);
+      if (data.summary) {
+        setText(data.summary);
+        toast.success("Đã tạo tóm tắt AI.");
+      }
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Lỗi");
+      const m = e instanceof Error ? e.message : "Lỗi";
+      setError(m);
+      toast.error(m);
     } finally {
       setLoading(false);
     }
