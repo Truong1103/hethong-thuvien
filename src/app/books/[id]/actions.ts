@@ -22,13 +22,18 @@ export async function savePdfProgressAction(bookId: string, page: number | null)
   );
 }
 
-export async function saveAudioProgressAction(bookId: string, seconds: number | null) {
+export async function saveAudioProgressAction(
+  bookId: string,
+  seconds: number | null,
+  chapterId: string | null = null,
+) {
   const { supabase, user } = await requireUser();
   await supabase.from("user_book_progress").upsert(
     {
       user_id: user.id,
       book_id: bookId,
       audio_position_seconds: seconds,
+      audio_chapter_id: chapterId,
       updated_at: new Date().toISOString(),
     },
     { onConflict: "user_id,book_id" },

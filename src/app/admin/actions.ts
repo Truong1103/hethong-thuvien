@@ -81,6 +81,8 @@ export async function updateBookMetadataAction(bookId: string, formData: FormDat
     .eq("id", bookId);
   if (error) throw error;
   revalidatePath(`/books/${bookId}`);
+  revalidatePath(`/books/${bookId}/listen`);
+  revalidatePath(`/admin/books/${bookId}/edit`);
   revalidatePath("/admin/books");
 }
 

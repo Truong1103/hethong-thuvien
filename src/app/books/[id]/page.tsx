@@ -4,6 +4,7 @@ import { ReviewsSection } from "@/app/books/[id]/ReviewsSection";
 import { ShelfButtons } from "@/app/books/[id]/ShelfButtons";
 import { ViewIncrement } from "@/app/books/[id]/ViewIncrement";
 import type { BookshelfStatus } from "@/app/books/[id]/actions";
+import { bookHasAudio } from "@/lib/books/audio";
 import { linkBtnGhost, linkBtnPrimary, linkBtnSecondary } from "@/lib/ui";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { ArrowLeft, BookOpen, Headphones } from "lucide-react";
@@ -30,7 +31,8 @@ export default async function BookDetailPage(props: { params: Params }) {
 
   if (error || !book) return notFound();
 
-  const [{ data: summaryRow }, { data: shelfRow }, { data: reviews }, { data: myReviewRow }] = await Promise.all([
+  const [{ data: summaryRow }, { data: shelfRow }, { data: reviews }, { data: myReviewRow }, { count: audioChapterCount }] =
+    await Promise.all([
     supabase.from("book_summaries").select("summary").eq("book_id", id).maybeSingle(),
     user
       ? supabase.from("user_bookshelves").select("status").eq("book_id", id).eq("user_id", user.id).maybeSingle()
@@ -48,7 +50,13 @@ export default async function BookDetailPage(props: { params: Params }) {
           .eq("user_id", user.id)
           .maybeSingle()
       : Promise.resolve({ data: null } as const),
+    supabase
+      .from("book_audio_chapters")
+      .select("id", { count: "exact", head: true })
+      .eq("book_id", id),
   ]);
+
+  const hasAudio = bookHasAudio({ audio_path: book.audio_path, audio_chapter_count: audioChapterCount });
 
   const userIds = [...new Set((reviews ?? []).map((r) => r.user_id))];
   const { data: profs } =
@@ -148,7 +156,7 @@ export default async function BookDetailPage(props: { params: Params }) {
                   Đọc PDF
                 </span>
               )}
-              {book.audio_path ? (
+              {hasAudio ? (
                 <Link href={`/books/${book.id}/listen`} className={linkBtnSecondary}>
                   <Headphones className="h-4 w-4 shrink-0" />
                   Nghe audio
@@ -174,7 +182,7 @@ export default async function BookDetailPage(props: { params: Params }) {
                 Sách này chưa có file PDF.
               </div>
             ) : null}
-            {!book.audio_path ? (
+            {!hasAudio ? (
               <div className="mt-1 rounded-xl border border-amber-200/90 bg-amber-50 px-4 py-3 text-sm text-amber-900">
                 Sách này chưa có file audio.
               </div>
