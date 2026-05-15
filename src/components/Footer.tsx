@@ -2,6 +2,7 @@ import { BookOpen, LayoutGrid, LogIn, LogOut, MessageSquare, Shield, Sparkles, U
 import Image from "next/image";
 import Link from "next/link";
 import { signOutAction } from "@/app/actions/auth";
+import { MotionFooter } from "@/components/motion";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 const footerLink = "text-sm text-zinc-600 transition hover:text-teal-700";
@@ -17,7 +18,7 @@ export async function Footer() {
     : { data: null as { is_admin: boolean } | null };
 
   return (
-    <footer className="mt-auto border-t border-zinc-200/90 bg-gradient-to-b from-white to-zinc-50/80">
+    <MotionFooter className="mt-auto border-t border-emerald-200/60 bg-white/55 backdrop-blur-md">
       <div className="mx-auto max-w-6xl px-4 py-10 sm:py-12">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-5">
@@ -150,6 +151,6 @@ export async function Footer() {
           <p className="text-zinc-400">Designed by Hoang Ngoc Quyen</p>
         </div>
       </div>
-    </footer>
+    </MotionFooter>
   );
 }

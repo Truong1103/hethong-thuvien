@@ -1,6 +1,7 @@
 import { BookOpen } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { FadeUp, StaggerContainer, StaggerItem } from "@/components/motion";
 import { btnPrimaryInlineClass, inputClass } from "@/lib/ui";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -37,13 +38,14 @@ export default async function BooksPage(props: { searchParams: SearchParams }) {
 
   return (
     <div className="space-y-8">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+      <FadeUp className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-zinc-900">Kho sách</h1>
           <p className="mt-1 text-sm text-zinc-600">Tìm kiếm, xem bìa và mở sách để đọc hoặc nghe.</p>
         </div>
-      </div>
+      </FadeUp>
 
+      <FadeUp delay={0.08}>
       <form className="grid gap-4 rounded-2xl border border-zinc-200/90 bg-white p-5 shadow-sm sm:grid-cols-6">
         <div className="sm:col-span-2">
           <label className="text-xs font-semibold uppercase tracking-wide text-zinc-500">Từ khóa</label>
@@ -80,19 +82,20 @@ export default async function BooksPage(props: { searchParams: SearchParams }) {
           </button>
         </div>
       </form>
+      </FadeUp>
 
       {error ? (
         <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">{error.message}</div>
       ) : null}
 
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <StaggerContainer className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {(books ?? []).map((b) => {
           const coverUrl = b.cover_path
             ? supabase.storage.from("covers").getPublicUrl(b.cover_path).data.publicUrl
             : null;
           return (
+            <StaggerItem key={b.id}>
             <Link
-              key={b.id}
               href={`/books/${b.id}`}
               className="group flex gap-4 overflow-hidden rounded-2xl border border-zinc-200/90 bg-white p-4 shadow-sm transition hover:border-teal-200/80 hover:shadow-md"
             >
@@ -128,9 +131,10 @@ export default async function BooksPage(props: { searchParams: SearchParams }) {
                 </div>
               </div>
             </Link>
+            </StaggerItem>
           );
         })}
-      </div>
+      </StaggerContainer>
 
       {!error && (books?.length ?? 0) === 0 ? (
         <div className="flex flex-col items-center rounded-2xl border border-dashed border-zinc-300 bg-zinc-50/80 py-12 text-center">

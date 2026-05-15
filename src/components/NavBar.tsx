@@ -12,6 +12,7 @@ import {
   Users,
 } from "lucide-react";
 import { signOutAction } from "@/app/actions/auth";
+import { MotionHeader } from "@/components/motion";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export async function NavBar() {
@@ -36,10 +37,10 @@ export async function NavBar() {
   }
 
   const navLink =
-    "flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm font-medium text-zinc-600 transition hover:bg-zinc-100 hover:text-zinc-900";
+    "flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-sm font-medium text-zinc-600 transition hover:bg-white/70 hover:text-zinc-900";
 
   return (
-    <header className="sticky top-0 z-50 border-b border-zinc-200/80 bg-white/85 backdrop-blur-md supports-[backdrop-filter]:bg-white/70">
+    <MotionHeader className="sticky top-0 z-50 border-b border-emerald-200/50 bg-white/75 backdrop-blur-md supports-[backdrop-filter]:bg-white/65">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-4">
         <Link
           href="/"
@@ -123,6 +124,6 @@ export async function NavBar() {
           )}
         </nav>
       </div>
-    </header>
+    </MotionHeader>
   );
 }

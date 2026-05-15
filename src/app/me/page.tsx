@@ -1,6 +1,7 @@
 import { BarChart3, BookMarked, Library, Pencil, QrCode, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { FadeUp, MotionSection, StaggerContainer, StaggerItem } from "@/components/motion";
 import { linkBtnGhost, linkBtnPrimary, linkBtnSecondary } from "@/lib/ui";
 import { requireUser } from "@/lib/auth";
 
@@ -22,7 +23,7 @@ export default async function MePage() {
 
   return (
     <div className="space-y-8">
-      <div className="overflow-hidden rounded-3xl border border-zinc-200/90 bg-gradient-to-br from-white via-teal-50/20 to-zinc-50/40 p-6 shadow-xl shadow-zinc-900/5 sm:p-8">
+      <MotionSection className="overflow-hidden rounded-3xl border border-zinc-200/90 bg-gradient-to-br from-white via-teal-50/20 to-zinc-50/40 p-6 shadow-xl shadow-zinc-900/5 sm:p-8">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
           <div className="relative mx-auto h-24 w-24 shrink-0 overflow-hidden rounded-2xl bg-zinc-100 shadow-md ring-4 ring-white sm:mx-0">
             {profile?.avatar_url ? (
@@ -74,14 +75,14 @@ export default async function MePage() {
             </div>
           </div>
         ) : null}
-      </div>
+      </MotionSection>
 
       <section>
         <h2 className="text-sm font-semibold uppercase tracking-wide text-zinc-500">Lối tắt</h2>
-        <div className="mt-3 grid gap-3 sm:grid-cols-2">
+        <StaggerContainer className="mt-3 grid gap-3 sm:grid-cols-2">
           {shortcuts.map(({ href, label, desc, icon: Icon }) => (
+            <StaggerItem key={href}>
             <Link
-              key={href}
               href={href}
               className="group flex gap-4 rounded-2xl border border-zinc-200/90 bg-white p-4 shadow-sm transition hover:border-teal-200/80 hover:shadow-md"
             >
@@ -93,18 +94,19 @@ export default async function MePage() {
                 <div className="mt-0.5 text-xs text-zinc-600">{desc}</div>
               </div>
             </Link>
+            </StaggerItem>
           ))}
-        </div>
+        </StaggerContainer>
       </section>
 
-      <div className="flex flex-wrap justify-center gap-2 border-t border-zinc-200/80 pt-8 sm:justify-start">
+      <FadeUp className="flex flex-wrap justify-center gap-2 border-t border-zinc-200/80 pt-8 sm:justify-start">
         <Link href="/books" className={linkBtnGhost}>
           ← Kho sách
         </Link>
         <Link href="/community" className={linkBtnGhost}>
           Cộng đồng
         </Link>
-      </div>
+      </FadeUp>
     </div>
   );
 }

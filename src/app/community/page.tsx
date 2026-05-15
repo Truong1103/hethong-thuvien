@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { CommunitySubnav } from "@/components/community/CommunitySubnav";
+import { MotionSection, StaggerContainer, StaggerItem } from "@/components/motion";
 import { linkBtnPrimary, linkBtnSecondary } from "@/lib/ui";
 
 const blocks = [
@@ -57,7 +58,7 @@ const blocks = [
 export default function CommunityHubPage() {
   return (
     <div className="space-y-8">
-      <div className="overflow-hidden rounded-3xl border border-zinc-200/90 bg-gradient-to-br from-white via-indigo-50/25 to-teal-50/30 p-6 shadow-xl shadow-zinc-900/5 sm:p-10">
+      <MotionSection className="overflow-hidden rounded-3xl border border-zinc-200/90 bg-gradient-to-br from-white via-indigo-50/25 to-teal-50/30 p-6 shadow-xl shadow-zinc-900/5 sm:p-10">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl space-y-3">
             <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-indigo-700">
@@ -80,14 +81,14 @@ export default function CommunityHubPage() {
             </Link>
           </div>
         </div>
-      </div>
+      </MotionSection>
 
       <CommunitySubnav current="hub" />
 
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      <StaggerContainer className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {blocks.map(({ href, icon: Icon, title, desc, color, bg }) => (
+          <StaggerItem key={href}>
           <Link
-            key={href}
             href={href}
             className={`group flex flex-col rounded-2xl border border-zinc-200/90 bg-gradient-to-br ${bg} p-5 shadow-sm transition hover:border-teal-200/80 hover:shadow-md`}
           >
@@ -98,10 +99,11 @@ export default function CommunityHubPage() {
             <p className="mt-2 flex-1 text-sm leading-relaxed text-zinc-600">{desc}</p>
             <span className="mt-4 text-sm font-semibold text-teal-700 group-hover:underline">Vào trang →</span>
           </Link>
+          </StaggerItem>
         ))}
-      </section>
+      </StaggerContainer>
 
-      <section className="rounded-2xl border border-dashed border-zinc-300 bg-zinc-50/80 px-6 py-8 text-center">
+      <MotionSection delay={0.1} className="rounded-2xl border border-dashed border-zinc-300 bg-zinc-50/80 px-6 py-8 text-center">
         <p className="text-sm font-medium text-zinc-800">Mẹo</p>
         <p className="mx-auto mt-2 max-w-2xl text-sm leading-relaxed text-zinc-600">
           Thêm thể loại yêu thích trong hồ sơ để gợi ý theo dõi chính xác hơn; theo dõi vài bạn đọc để Feed luôn có hoạt
@@ -116,7 +118,7 @@ export default function CommunityHubPage() {
             Xem gợi ý theo dõi
           </Link>
         </div>
-      </section>
+      </MotionSection>
     </div>
   );
 }

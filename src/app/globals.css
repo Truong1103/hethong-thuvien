@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fafafa;
+  --background: #ecfdf5;
+  --background-end: #d1fae5;
   --foreground: #18181b;
 }
 
@@ -12,13 +13,6 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0c0c0e;
-    --foreground: #f4f4f5;
-  }
-}
-
 body {
   background-color: var(--background);
   color: var(--foreground);
@@ -26,4 +20,70 @@ body {
 
 ::selection {
   background-color: rgb(20 184 166 / 0.25);
+}
+
+/* Bong bóng nền — nổi, bay lên, lắc ngang */
+@keyframes bubble-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(28px, -48px, 0) scale(1.06);
+  }
+  66% {
+    transform: translate3d(-22px, -88px, 0) scale(0.96);
+  }
+}
+
+@keyframes bubble-rise {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(var(--bubble-drift, 16px), -140px, 0) scale(1.05);
+  }
+  100% {
+    transform: translate3d(calc(var(--bubble-drift, 16px) * -0.6), -280px, 0) scale(0.94);
+  }
+}
+
+@keyframes bubble-sway {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate3d(36px, -24px, 0) rotate(3deg);
+  }
+  75% {
+    transform: translate3d(-32px, -52px, 0) rotate(-3deg);
+  }
+}
+
+.bubble {
+  position: absolute;
+  will-change: transform;
+}
+
+.bubble-float {
+  animation: bubble-float ease-in-out infinite;
+}
+
+.bubble-rise {
+  animation: bubble-rise linear infinite;
+}
+
+.bubble-sway {
+  animation: bubble-sway ease-in-out infinite;
+}
+
+.bubble-reverse {
+  animation-direction: reverse;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bubble {
+    animation-duration: 18s !important;
+  }
 }
