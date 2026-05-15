@@ -1,4 +1,5 @@
-import { BookOpen, LayoutGrid, Library, LogIn, LogOut, MessageSquare, Shield, Sparkles, User } from "lucide-react";
+import { BookOpen, LayoutGrid, LogIn, LogOut, MessageSquare, Shield, Sparkles, User } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { signOutAction } from "@/app/actions/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -21,8 +22,14 @@ export async function Footer() {
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-12 lg:gap-8">
           <div className="lg:col-span-5">
             <Link href="/" className="inline-flex items-center gap-2 font-semibold tracking-tight text-zinc-900">
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-teal-500 to-emerald-600 text-white shadow-sm shadow-teal-600/20">
-                <Library className="h-4 w-4" strokeWidth={2.5} />
+              <span className="relative flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-teal-500 to-emerald-600 shadow-sm shadow-teal-600/20 ring-1 ring-white/25">
+                <Image
+                  src="/book.png"
+                  alt="Thư viện Số Lá Xanh"
+                  width={24}
+                  height={24}
+                  className="h-5 w-5 object-contain drop-shadow-sm mix-blend-screen"
+                />
               </span>
               Thư viện Số Lá Xanh
             </Link>
