@@ -42,8 +42,8 @@ const blocks = [
     icon: Quote,
     title: "Trích dẫn công khai",
     desc: "Đọc những câu trích hay được chia sẻ từ sách trong kho — nguồn cảm hứng nhanh cho danh sách đọc tiếp theo.",
-    color: "text-rose-600",
-    bg: "from-rose-500/10 to-pink-500/5",
+    color: "text-teal-600",
+    bg: "from-teal-500/10 to-emerald-500/5",
   },
   {
     href: "/community/suggestions",
