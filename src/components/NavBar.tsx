@@ -60,7 +60,7 @@ export async function NavBar() {
           <span className="hidden sm:inline">Thư viện Số Lá Xanh</span>
         </Link>
 
-        <nav className="flex min-w-0 flex-1 flex-wrap items-center justify-end gap-1 sm:gap-2 md:justify-center">
+        <nav className="flex min-w-0 flex-1 flex-nowrap items-center justify-end gap-1 overflow-x-auto sm:gap-2 md:justify-center">
           <Link href="/gioi-thieu" className={navLink}>
             <Info className="h-4 w-4 shrink-0 text-violet-600" />
             <span className="hidden sm:inline">Giới thiệu</span>

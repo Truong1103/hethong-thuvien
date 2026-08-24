@@ -45,7 +45,7 @@ const processSteps = [
   },
   {
     title: "Phân công & thiết kế",
-    desc: "Chia việc theo module (sách, tài khoản, mượn, cộng đồng, AI). Thiết kế luồng người dùng, giao diện và kiến trúc Next.js + Supabase.",
+    desc: "Chia việc theo các phần sách, tài khoản, mượn, cộng đồng và trợ lý ảo. Thiết kế luồng sử dụng rõ ràng, phù hợp với nhu cầu đọc và quản lý thư viện.",
   },
   {
     title: "Phát triển tính năng",
@@ -53,7 +53,7 @@ const processSteps = [
   },
   {
     title: "Tinh chỉnh chatbot",
-    desc: "Ràng buộc gợi ý theo danh mục CSDL, hội thoại nhiều lượt, card sách kèm link chi tiết — tránh bịa đầu sách không có trong thư viện.",
+    desc: "Tinh chỉnh khả năng hỏi đáp nhiều lượt, gợi ý sách phù hợp và dẫn người đọc tới trang chi tiết của từng cuốn trong thư viện.",
   },
   {
     title: "Kiểm thử & triển khai",
@@ -95,12 +95,6 @@ const products = [
 ] as const;
 
 const evidence = [
-  {
-    href: "https://hethong-thuvien.vercel.app/",
-    external: true,
-    title: "Mã nguồn GitHub",
-    desc: "Toàn bộ mã nguồn dự án (Next.js, API chatbot, schema Supabase).",
-  },
   {
     href: "/",
     external: false,
@@ -184,7 +178,7 @@ export default function AboutPage() {
                   <h2 className="text-xl font-bold tracking-tight text-zinc-900 sm:text-2xl">
                     Dự án web & chatbot thủ thư ảo
                   </h2>
-                  <p className="mt-1 text-sm text-zinc-500">Thư viện Số Lá Xanh — Next.js, Supabase, AI</p>
+                  <p className="mt-1 text-sm text-zinc-500">Thư viện Số Lá Xanh — đọc sách số và trợ lý ảo</p>
                 </div>
               </div>
               <div className="mt-5 space-y-4 text-sm leading-relaxed text-zinc-600 sm:text-base">
@@ -195,7 +189,7 @@ export default function AboutPage() {
                 <p>
                   <strong className="font-semibold text-zinc-800">Chatbot là trọng tâm:</strong> người dùng hỏi bằng
                   tiếng Việt (thể loại, mức độ khó, so sánh cách đọc…). Hệ thống tra cứu kho sách, trả lời có cấu trúc
-                  và đính kèm thẻ sách dẫn tới trang chi tiết. Hội thoại nhiều lượt, gợi ý chỉ lấy từ CSDL.
+                  và đính kèm thẻ sách dẫn tới trang chi tiết. Hội thoại nhiều lượt, gợi ý chỉ lấy từ kho sách.
                 </p>
                 <ul className="list-inside list-disc space-y-1.5">
                   <li>Gợi ý 1–6 đầu sách phù hợp, nêu lý do ngắn.</li>
@@ -259,7 +253,7 @@ export default function AboutPage() {
                 </li>
                 <li className="flex gap-3">
                   <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-sky-600" />
-                  Minh chứng học phần: sản phẩm chạy được, mã nguồn công khai, kịch bản demo chatbot rõ ràng.
+                  Minh chứng học phần: sản phẩm chạy được, các tính năng chính và kịch bản demo chatbot rõ ràng.
                 </li>
               </ul>
             </MotionSection>
@@ -315,7 +309,7 @@ export default function AboutPage() {
               <h2 className="text-xl font-bold tracking-tight text-zinc-900 sm:text-2xl">Liên kết minh chứng</h2>
             </div>
             <p className="mb-4 text-sm leading-relaxed text-zinc-600">
-              Các đường dẫn dùng khi báo cáo: mã nguồn, trang chạy thật và kịch bản chatbot.
+              Các đường dẫn dùng khi báo cáo: sản phẩm, kho sách và kịch bản chatbot.
             </p>
             <ul className="space-y-3">
               {evidence.map((item) => (
