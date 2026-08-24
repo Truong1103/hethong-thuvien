@@ -1,4 +1,4 @@
-import { BookOpen, LayoutGrid, LogIn, LogOut, MessageSquare, Shield, Sparkles, User } from "lucide-react";
+import { BookOpen, Info, LayoutGrid, LogIn, LogOut, MessageSquare, Shield, Sparkles, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { signOutAction } from "@/app/actions/auth";
@@ -42,6 +42,12 @@ export async function Footer() {
           <div className="lg:col-span-3">
             <h2 className="text-xs font-semibold uppercase tracking-wider text-zinc-500">Khám phá</h2>
             <ul className="mt-4 space-y-2.5">
+              <li>
+                <Link href="/gioi-thieu" className={`inline-flex items-center gap-2 ${footerLink}`}>
+                  <Info className="h-4 w-4 text-violet-600" />
+                  Giới thiệu
+                </Link>
+              </li>
               <li>
                 <Link href="/books" className={`inline-flex items-center gap-2 ${footerLink}`}>
                   <BookOpen className="h-4 w-4 text-teal-600" />
