@@ -2,6 +2,9 @@
 
 # dependencies
 /node_modules
+/baocao/node_modules
+baocao/~$*
+baocao/_bao_cao_tmp.docx
 /.pnp
 .pnp.*
 .yarn/*

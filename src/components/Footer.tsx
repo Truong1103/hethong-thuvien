@@ -154,7 +154,7 @@ export async function Footer() {
 
         <div className="mt-10 flex flex-col gap-3 border-t border-zinc-200/80 pt-8 text-xs text-zinc-500 sm:flex-row sm:items-center sm:justify-between">
           <p>© {year} Thư viện Số.</p>
-          <p className="text-zinc-400">Designed by Hoang Ngoc Quyen</p>
+          <p className="text-zinc-400"></p>
         </div>
       </div>
     </MotionFooter>

@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 
 const SHOW_AFTER_PX = 320;
-const ZALO_URL = "https://zalo.me/0348177164";
+const ZALO_URL = "https://zalo.me/0922630774";
 
 export function ScrollToTop() {
   const [visible, setVisible] = useState(false);
