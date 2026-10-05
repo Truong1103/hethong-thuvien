@@ -7,35 +7,24 @@ import {
   Link2,
   Package,
   Sparkles,
-  Users,
 } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { MotionCard, MotionSection, StaggerContainer, StaggerItem } from "@/components/motion";
+import { MotionSection, StaggerContainer, StaggerItem } from "@/components/motion";
 import { linkBtnPrimary, linkBtnSecondary } from "@/lib/ui";
 
 export const metadata: Metadata = {
   title: "Giới thiệu | Thư viện Số Lá Xanh",
   description:
-    "Giới thiệu dự án Thư viện Số Lá Xanh, chatbot thủ thư ảo, thành viên nhóm, mục tiêu, quy trình, sản phẩm và liên kết minh chứng.",
+    "Giới thiệu dự án Thư viện Số Lá Xanh, chatbot thủ thư ảo, mục tiêu, quy trình, sản phẩm và liên kết minh chứng.",
 };
 
 const toc = [
   { href: "#du-an", label: "Dự án & chatbot" },
-  { href: "#thanh-vien", label: "Thành viên" },
   { href: "#muc-tieu", label: "Mục tiêu" },
   { href: "#quy-trinh", label: "Quy trình" },
   { href: "#san-pham", label: "Sản phẩm" },
   { href: "#minh-chung", label: "Minh chứng" },
-] as const;
-
-const members = [
-  { name: "Hoàng Thị Ngọc Quỳnh", studentId: "52.06.601.015", role: "Nhóm trưởng" },
-  { name: "Nguyễn Trần Tuyết Nhi", studentId: "52.06.601.012", role: "Thành viên" },
-  { name: "Phạm Thanh Sang", studentId: "52.06.601.016", role: "Thành viên" },
-  { name: "Võ Trần Ngọc Thảo", studentId: "52.06.601.018", role: "Thành viên" },
-  { name: "Nguyễn Lê Hương Lan", studentId: "52.06.101.015", role: "Thành viên" },
-  { name: "Phạm Mỹ Ngọc", studentId: "52.06.601.010", role: "Thành viên" },
 ] as const;
 
 const processSteps = [
@@ -203,33 +192,6 @@ export default function AboutPage() {
                 <em>«Trong thư viện có sách về lãnh đạo không?»</em>
               </div>
             </MotionSection>
-          </section>
-
-          <section id="thanh-vien" className="scroll-mt-24">
-            <div className="mb-4 flex items-center gap-2">
-              <Users className="h-5 w-5 text-teal-600" />
-              <h2 className="text-xl font-bold tracking-tight text-zinc-900 sm:text-2xl">Thành viên</h2>
-            </div>
-            <StaggerContainer className="grid gap-3 sm:grid-cols-2">
-              {members.map((m, i) => (
-                <StaggerItem key={m.studentId}>
-                  <MotionCard className="flex gap-4 rounded-2xl border border-zinc-200/90 bg-white p-4 shadow-sm">
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-teal-600 text-sm font-bold text-white">
-                      {i + 1}
-                    </span>
-                    <div className="min-w-0">
-                      <p className="font-semibold text-zinc-900">{m.name}</p>
-                      <p className="mt-0.5 font-mono text-sm text-zinc-500">{m.studentId}</p>
-                      <p
-                        className={`mt-1 text-xs font-semibold ${m.role === "Nhóm trưởng" ? "text-teal-700" : "text-zinc-500"}`}
-                      >
-                        {m.role}
-                      </p>
-                    </div>
-                  </MotionCard>
-                </StaggerItem>
-              ))}
-            </StaggerContainer>
           </section>
 
           <section id="muc-tieu" className="scroll-mt-24">
